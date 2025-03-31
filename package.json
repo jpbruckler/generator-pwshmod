@@ -1,0 +1,12 @@
+{
+  "name": "generator-pwshmod",
+  "version": "0.1.0",
+  "description": "Yeoman generator for PowerShell module scaffolding",
+  "main": "generators/app/index.js",
+  "keywords": ["yeoman-generator"],
+  "dependencies": {
+    "yeoman-generator": "^5.7.0"
+  },
+  "files": ["generators"],
+  "license": "MIT"
+}
