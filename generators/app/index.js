@@ -1,16 +1,22 @@
-const Generator = require('yeoman-generator');
+const Generator = require("yeoman-generator");
 
 module.exports = class extends Generator {
   prompting() {
     return this.prompt([
       {
-        type: 'input',
-        name: 'modulename',
-        message: 'Your PowerShell module name',
-        default: this.appname.replace(/\s+/g, '-')
-      }
-    ]).then(answers => {
+        type: "input",
+        name: "modulename",
+        message: "Your PowerShell module name",
+        default: this.appname.replace(/\s+/g, "-"),
+      },
+      {
+        type: "confirm",
+        name: "useClasses",
+        message: "Will this module use PowerShell classes?",
+      },
+    ]).then((answers) => {
       this.moduleName = answers.modulename;
+      this.useClasses = answers.useClasses;
     });
   }
 
@@ -19,24 +25,28 @@ module.exports = class extends Generator {
 
     // Root files
     this.fs.copyTpl(
-      this.templatePath('README.md'),
+      this.templatePath("README.md"),
       this.destinationPath(`${base}/README.md`),
-      { modulename: this.moduleName }
+      { modulename: this.moduleName },
     );
 
     // Directory structure with .gitkeep
-    const folders = [
-      'docs',
-      'src/Classes',
-      'src/Private',
-      'src/Public',
-      'src/testing/integration',
-      'src/testing/unit/private',
-      'src/testing/unit/public'
+    let folders = [
+      "docs",
+      "src/Classes",
+      "src/Private",
+      "src/Public",
+      "src/testing/integration",
+      "src/testing/unit/private",
+      "src/testing/unit/public",
     ];
 
-    folders.forEach(folder => {
-      this.fs.write(this.destinationPath(`${base}/${folder}/.gitkeep`), '');
+    if (this.useClasses == false) {
+      folders.splice(1, 1);
+    }
+
+    folders.forEach((folder) => {
+      this.fs.write(this.destinationPath(`${base}/${folder}/.gitkeep`), "");
     });
   }
 };
